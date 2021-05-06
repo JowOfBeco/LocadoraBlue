@@ -13,7 +13,7 @@ CONFIGURACOES_BD = {
 
 
 def execute(sql, params=None):
-    with connect(host="localhost", user="root", password="root", database="bluecommerce") as conn:
+    with connect(host="localhost", user="root", password="root", database="locadora") as conn:
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
             conn.commit()
@@ -21,7 +21,7 @@ def execute(sql, params=None):
 
 
 def query(sql, params=None):
-    with connect(host="localhost", user="root", password="root", database="bluecommerce") as conn:
+    with connect(host="localhost", user="root", password="root", database="locadora") as conn:
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
             return cursor.fetchall()
@@ -85,13 +85,13 @@ def insert(tabela, colunas, valores):
 def search_data(nome_tabela, nome_linha, dado_linha):
     return query(f'''select * from {nome_tabela} where {nome_linha} = %s''', (dado_linha,))
 
-def update(nome_tabela,coluna, valor, id_coluna, id_valor):
-    execute(f"""UPDATE {nome_tabela} 
-            SET {coluna} = %s WHERE {id_coluna} = %s""", (valor, id_valor))
+#def update(nome_tabela,coluna, valor, id_coluna, id_valor):
+#   execute(f"""UPDATE {nome_tabela}
+#            SET {coluna} = %s WHERE {id_coluna} = %s""", (valor, id_valor))
 
-def update_2(tabela, chave, valor_chave, colunas, valores):
+def update(tabela, nome_chave, valor_chave, colunas, valores):
     sets = [f"{coluna} = %s" for coluna in colunas]
-    execute(f"""UPDATE {tabela} SET {",".join(sets)} WHERE {chave} = %s""", valores + [valor_chave])
+    execute(f"""UPDATE {tabela} SET {",".join(sets)} WHERE {nome_chave} = %s""", valores + [valor_chave])
 
 def delete_data(nome_tabela, nome_coluna, coluna_valor):
     execute(f"""delete from  {nome_tabela} 

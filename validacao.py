@@ -1,27 +1,15 @@
-from models import get_estado
 
-def valida_estado(sigla, nome):
-    if len(sigla) != 2:
+def valida_filme(titulo, ano, classificacao, preco, diretores_id, generos_id):
+    if titulo == 0:
         return False
-
-    if len(nome) == 0:
+    elif ano == 0:
         return False
-
-    estado = get_estado(sigla)
-    if len(estado) > 0:
+    elif classificacao == 0:
         return False
-
-    return True
-
-def valida_pais(nome, sigla):
-    if len(sigla) !=2:
+    elif preco == 0:
         return False
-
-    if len(nome) ==0:
+    elif diretores_id == 0:
         return False
-
-    pais = get_pais(sigla)
-    if len(pais) > 0:
+    elif generos_id == 0:
         return False
-
     return True

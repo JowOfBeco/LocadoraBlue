@@ -1,0 +1,107 @@
+@app.route("/filmes", methods=["GET", "PATCH", "DELETE", "POST"])
+def filmes():
+    a = request.json
+    if request.method == "GET":
+        return jsonify(select("filmes"))
+    elif request.method == "PATCH":
+        return jsonify(update(insert_filme()))
+    elif request.method == "DELETE":
+        return jsonify(delete_data("filmes", "id", a["id"]))
+    elif request.method == "POST":
+        return jsonify(insert("filmes", ("titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"),
+                              (a["titulo"], a["ano"], a["classificacao"], a["preco"], a["diretores_id"], a["generos_id"])))
+
+@app.route("/diretores", methods=["GET", "PATCH", "DELETE", "POST"])
+def diretores():
+    a = request.json
+    if request.method == "GET":
+        return jsonify(select("diretores"))
+    elif request.method == "PATCH":
+        return jsonify(update("diretores", "id",
+                              a["id"],
+                              ("nome_completo",),
+                              [a["nome"],]))
+    elif request.method == "DELETE":
+        return jsonify(delete_data("diretores", "id", a["id"]))
+    elif request.method == "POST":
+        return jsonify(insert("diretores", ("nome_completo",), (a["nome"],)))
+
+@app.route("/generos", methods=["GET", "PATCH", "DELETE", "POST"])
+def generos():
+    a = request.json
+    if request.method == "GET":
+        return jsonify(select("generos"))
+    elif request.method == "PATCH":
+        return jsonify(update("generos", "id", a["id"], ("nome",), [a["nome"]]))
+    elif request.method =="DELETE":
+        return jsonify(delete_data("generos", "id", a["id"]))
+    elif request.method == "POST":
+        return jsonify(insert("generos", ("nome",), (a["nome"],)))
+
+@app.route("/locacoes", methods=["GET", "PATCH", "DELETE", "POST"])
+def locacoes():
+    a = request.json
+    if request.method == "GET":
+        return jsonify(select("locacoes"))
+    elif request.method == "PATCH":
+        return jsonify(update("locacoes", "id",
+                              a["id"],
+                              ("data_inicio", "data_fim", "filmes_id","usuarios_id"),
+                              [a["data_inicio"], a["data_fim"], a["filme_id"], a["usuarios_id"]]))
+    elif request.method =="DELETE":
+        return jsonify(delete_data("locacoes", "id", a["id"]))
+    elif request.method == "POST":
+        return jsonify(insert("locacoes",
+                              ("data_inicio", "data_fim", "filmes_id", "usuarios_id"),
+                              (a["data_inicio"], a["data_fim"], a["filmes_id"], a["usuarios_id"])))
+
+@app.route("/pagamento", methods=["GET", "PATCH", "DELETE", "POST"])
+def pagamento():
+    a = request.json
+    if request.method == "GET":
+        pagamento = select("pagamento")
+        pagamento_formatado = converte_preco_em_string(pagamento)
+        return jsonify(pagamento_formatado)
+    elif request.method == "PATCH":
+        return jsonify(update("pagamento","id",
+                              ("tipo", "status", "codigo_pagamento", "valor", "data", "locacoes_id"),
+                              (a["tipo"], a["status"], a["codigo_pagamento"], a["valor"], a["data"], a["locacoes_id"])))
+    elif request.method =="DELETE":
+        return jsonify(delete_data("pagamento", "id", a["id"]))
+    elif request.method == "POST":
+        return jsonify(insert("pagamento",
+                              ("tipo","status", "codigo_pagamento", "valor", "data", "locacoes_id"),
+                              (a["tipo"], a["status"], a["codigo_pagamento"], a["valor"], a["data"], a["locacoes_id"])))
+
+@app.route("/usuarios", methods=["GET", "PATCH", "DELETE", "POST"])
+def usuarios():
+    a = request.json
+    if request.method == "GET":
+        return jsonify(select("usuarios"))
+    elif request.method == "PATCH":
+        return jsonify(update("usuarios", "id", a["id"], ("nome_completo", "CPF"), (a["nome_completo"], a["CPF"])))
+    elif request.method =="DELETE":
+        return jsonify(delete_data("usuarios", "id", a["id"]))
+    elif request.method == "POST":
+        return jsonify(insert("usuarios",
+                              ("nome_completo", "CPF"),
+                              (a["nome_complet", a["CPF"]])))
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', debug=True)
+
+def converte_preco_em_string(produto):
+    return (produto[0], produto[1], produto[2], str(produto[3]), produto[4], produto[5])
+
+from flask import Flask, jsonify, request
+from db_commands import query, select, update, delete_data, insert
+from models import insert_filme, get_filme
+from serializadores import filme_from_db, filme_from_web
+from validacao import valida_filme
+
+app = Flask(__name__)
+
+
+@app.route("/filmes", methods=["POST"])
+def filmes():
+    chama_validacao(filme_from_web(), filme_from_db(), valida_filme())

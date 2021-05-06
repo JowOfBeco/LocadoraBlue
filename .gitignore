@@ -1,0 +1,6 @@
+/venv
+/venv2
+*.swp
+/.pytest_cache
+__pycache__
+.idea

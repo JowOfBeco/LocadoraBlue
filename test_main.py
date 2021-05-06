@@ -1,5 +1,5 @@
 from MySQLdb import InternalError
-from main import execute, query, select, insert, update_2, delete_data, CONFIGURACOES_BD
+from db_commands import execute, query, select, insert, update_2, delete_data, CONFIGURACOES_BD
 
 CONFIGURACOES_BD = ""
 CONFIGURACOES_BD = {
