@@ -1,12 +1,10 @@
 from flask import Flask, jsonify, request
 from db_commands import query, select, update, delete_data, insert
-from models import insert_usuario, get_usuario
-from serializadores import usuario_from_db, usuario_from_web
+from models import insert_usuario, get_usuario, select_usuario
+from serializadores import usuario_from_db, usuario_from_web, nome_usuario_from_web
 from validacao import  valida_usuario
 app = Flask(__name__)
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', debug=True)
 
 @app.route("/usuarios", methods=["POST"])
 def inserir_usuario():
@@ -18,11 +16,17 @@ def inserir_usuario():
     else:
         return jsonify({"erro":"Usuário inválido"})
 
+@app.route("/usuarios", methods=["GET"])
+def buscar_usuario():
+    nome_completo = nome_usuario_from_web(**request.args)
+    usuarios = select_usuario(nome_completo)
+    usuarios_from_db = [usuario_from_db(usuario) for usuario in usuarios]
+    return jsonify(usuarios_from_db)
 
 
 
-
-
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', debug=True)
 
 
 

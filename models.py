@@ -1,10 +1,13 @@
-from db_commands import insert, select, update, delete_data
+from db_commands import insert, select, update, delete_data, search_data
 
 def insert_usuario(nome_completo, CPF):
-    return insert_usuario("usuarios", ["nome_comleto", "CPF"], [nome_completo, CPF])
+    return insert("usuarios", ["nome_completo", "CPF"], [nome_completo, CPF])
 
 def get_usuario(id_usuario):
-    return select("usuarios", id, id_usuario)[0]
+    return select("usuarios", "id", id_usuario)[0]
+
+def select_usuario(nome_completo):
+    return search_data("usuarios", "nome_completo", nome_completo)
 
 
 

@@ -1,13 +1,19 @@
 def usuario_from_db(args):
     return {
-        "sigla": args["sigla"],
-        "nome" : args["nome"],
+        "id": args["id"],
+        "nome_completo": args["nome_completo"],
+        "CPF": args["CPF"],
     }
 
 def usuario_from_web(**kwargs):
+    return {
+        "nome_completo": kwargs["nome_completo"] if "nome_completo" in kwargs else "",
+        "CPF": kwargs["CPF"] if "CPF" in kwargs else ""
+    }
+
+
+def nome_usuario_from_web(**kwargs):
     return kwargs["nome_completo"] if "nome_completo" in kwargs else ""
-
-
 
 
 
