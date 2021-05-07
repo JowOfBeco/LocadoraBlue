@@ -1,19 +1,73 @@
 from flask import Flask, jsonify, request
 from db_commands import query, select, update, delete_data, insert
-from models import insert_filme, get_filme
-from serializadores import filme_from_db, filme_from_web
-from validacao import valida_filme
+from models import insert_usuario, get_usuario
+from serializadores import usuario_from_db, usuario_from_web
+from validacao import  valida_usuario
 app = Flask(__name__)
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', debug=True)
+
+@app.route("/usuarios", methods=["POST"])
+def inserir_usuario():
+    usuario = usuario_from_web(**request.json)
+    if valida_usuario(**usuario):
+        id_usuario = insert_usuario(**usuario)
+        usuario_cadastrado = get_usuario(id_usuario)
+        return jsonify(usuario_from_db(usuario_cadastrado))
+    else:
+        return jsonify({"erro":"Usuário inválido"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+@app.route("/usuarios", methods=["POST"])
+def inserir_usuario():
+    usuario = usuario_from_web(**request.json)
+    if valida_usuario(**usuario):
+        pass
 
 @app.route("/filmes", methods=["POST"])
 def inserir_filme():
     filme = filme_from_web(**request.json)
     if valida_filme(**filme):
-        insert_filme(**filme)
+        id_filme = insert_filme(**filme)
+        filme_criado = get_filme(id_filme)
         return jsonify(filme_from_db(filme))
     else:
         return jsonify({"erro": "Filme Inválido."})
 
+@app.route("/filmes/<int:id>", methods=["DELETE"])
+def apagar_filme(id):
+    filme_id = delete_id_from_web(**request.json)
+    try:
+        if valida_id(id):
+            delete_filme(**filme_id)
+            return jsonify(delete_id_from_db(filme_id))
+    except:
+        return jsonify({"erro": "Não foi possível deletar esse filme."})
+
+@app.route("/filmes/", methods=["GET"])
+def get_filme():
+    filme = filme_from_web(**request.json)
+    filme_selecionado = select_filme(**filme)
+    if filme_selecionado != None:
+        return jsonify(filme_from_db(filme_selecionado))
+    else: return jsonify({"erro":"Filme inválido."})
+"""
 #@app.route("/diretores", methods=["POST"]) # 1 - Checa a rota
 #def inserir_estado():
 #    estado = estado_from_web(**request.json) # 3 - formata o que vem da internet
@@ -23,6 +77,3 @@ def inserir_filme():
 #        return jsonify(estado_from_db(estado_criado)) # 6 - retorna estado formatado pro usuário
 #    else:
 #        return jsonify({"erro": "estado inválido"})
-
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', debug=True)

@@ -1,3 +1,27 @@
+def usuario_from_db(args):
+    return {
+        "sigla": args["sigla"],
+        "nome" : args["nome"],
+    }
+
+def usuario_from_web(**kwargs):
+    return kwargs["nome_completo"] if "nome_completo" in kwargs else ""
+
+
+
+
+
+
+
+
+
+"""def usuario_from_web(**kwargs):
+    return {
+        "nome_completo": kwargs["nome_completo"] if "nome" in kwargs else "",
+        "CPF": kwargs["CPF"] if "CPF" in kwargs else ""
+    }
+
+
 def filme_from_web(**kwargs):
     return {
         "titulo": kwargs["titulo"] if "titulo" in kwargs else "",
@@ -10,12 +34,12 @@ def filme_from_web(**kwargs):
 
 def filme_from_db(*args):
     return {
-        "titulo": args[0],
-        "ano": args[0],
-        "classificacao": args[0],
-        "preco":args[0],
-        "diretores_id": args[0],
-        "generos_id": args[0]
+        "titulo": args["titulo"],
+        "ano": args["ano"],
+        "classificacao": args["classificacao"],
+        "preco":args["preco"],
+        "diretores_id": args["diretores_id"],
+        "generos_id": args["generos_id"]
     }
 
 def pais_from_web(**kwargs):
@@ -28,3 +52,14 @@ def pais_from_db(*args):
         "nome": args[0],
         "sigla": args[1],
     }
+
+def delete_id_from_web(**kwargs):
+    return {
+        "id": kwargs["id"] if kwargs["id"] else ""
+    }
+
+
+def delete_id_from_db(*args):
+    return {
+        "id": args[0]
+    }"""

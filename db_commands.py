@@ -17,12 +17,12 @@ def execute(sql, params=None):
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
             conn.commit()
-
+            return cursor.lastrowid
 
 
 def query(sql, params=None):
     with connect(host="localhost", user="root", password="root", database="locadora") as conn:
-        with conn.cursor() as cursor:
+        with conn.cursor(dictionary=True) as cursor:
             cursor.execute(sql, params)
             return cursor.fetchall()
 
@@ -80,7 +80,7 @@ def create_estoque():
     tipo varchar(255) default 'NULL')""")
 
 def insert(tabela, colunas, valores):
-    execute(f"INSERT INTO {tabela} ({', '.join(colunas)}) VALUES ({', '.join(['%s' for valor in valores])})", valores)
+    return execute(f"INSERT INTO {tabela} ({', '.join(colunas)}) VALUES ({', '.join(['%s' for valor in valores])})", valores)
 
 def search_data(nome_tabela, nome_linha, dado_linha):
     return query(f'''select * from {nome_tabela} where {nome_linha} = %s''', (dado_linha,))
