@@ -17,7 +17,7 @@ def inserir_usuario():
 
 @app.route("/usuarios", methods=["GET"])
 def buscar_usuario():
-    nome_completo = nome_usuario_from_web(**request.args)
+    nome_completo = nome_usuario_from_web(**request.json)
     usuarios = select_usuario(nome_completo)
     usuarios_from_db = [usuario_from_db(usuario) for usuario in usuarios]
     return jsonify(usuarios_from_db)
@@ -36,7 +36,7 @@ def alterar_usuario(id):
 def apagar_usuario(id):
     try:
         delete_usuario(id)
-        return None, 204
+        return "", 204
     except:
         return jsonify({"erro": "Não foi possivel excluir este usuário, existem itens conectados a ele."})
 
@@ -52,12 +52,12 @@ def inserir_diretor():
 
 @app.route("/diretores", methods=["GET"])
 def buscar_diretor():
-    nome_completo = diretor_from_web(**request.args)
+    nome_completo = nome_diretor_from_web(**request.json)
     diretores = select_diretor(nome_completo)
     diretores_from_db = [diretor_from_db(diretor) for diretor in diretores]
     return jsonify(diretores_from_db)
 
-@app.route("/diretores/<int/id>", methods=["PATCH", "PUT"])
+@app.route("/diretores/<int:id>", methods=["PATCH", "PUT"])
 def alterar_diretor(id):
     diretor = diretor_from_web(**request.json)
     if valida_diretor(**diretor):
@@ -67,11 +67,11 @@ def alterar_diretor(id):
     else:
         return jsonify({"erro":"Diretor Inválido."})
 
-@app.route("/diretores/<int/id>", methdos=["DELETE"])
+@app.route("/diretores/<int:id>", methods=["DELETE"])
 def apagar_diretores(id):
     try:
         delete_diretor(id)
-        return None, 204
+        return "", 204
     except:
         return jsonify({"erro":"Não foi possivel excluir este usuário, existem itens conectados a ele."})
 
@@ -92,7 +92,7 @@ def buscar_generos():
     generos_from_db = [genero_from_db(genero) for genero in generos]
     return jsonify(generos_from_db)
 
-@app.route("/generos/<int/id>", methods=["PATCH", "PUT"])
+@app.route("/generos/<int:id>", methods=["PATCH", "PUT"])
 def alterar_genero(id):
     genero = genero_from_web(**request.json)
     if valida_genero(**genero):
@@ -102,11 +102,11 @@ def alterar_genero(id):
     else:
         return jsonify({"erro":"Genero Inválido."})
 
-@app.route("/generos/<int/id>", methods=["DELETE"])
+@app.route("/generos/<int:id>", methods=["DELETE"])
 def apagar_genero(id):
     try:
         delete_genero(id)
-        return None, 204
+        return "", 204
     except:
         return jsonify({"erro":"Não foi possivel excluir este genero, existem itens conectados a ele."})
 
@@ -127,7 +127,7 @@ def buscar_filmes():
     filmes_from_db = [filme_from_db(filme) for filme in filmes]
     return jsonify(filmes_from_db)
 
-@app.route("/filmes<int/id>",methods=["PATCH", "PUT"])
+@app.route("/filmes/<int:id>",methods=["PATCH", "PUT"])
 def alterar_filme(id):
     filme = filme_from_web(**request.json)
     if valida_filme(**filme):
@@ -137,11 +137,11 @@ def alterar_filme(id):
     else:
         return jsonify({"erro":"Filme Inválido."})
 
-@app.route("/filmes<int/id>", methods=["DELETE"])
+@app.route("/filmes/<int:id>", methods=["DELETE"])
 def apagar_filme(id):
     try:
         delete_filme(id)
-        return None, 204
+        return "", 204
     except:
         return jsonify({"erro":"Não foi possivel excluir esse filme, existem itens conectados a ele."})
 
@@ -155,60 +155,66 @@ def inserir_locacao():
     else:
         return jsonify({"erro":"Locação Inválida."})
 
+@app.route("/locacoes", methods=["GET"])
+def buscar_locacoes():
+    locacao_id = id_locacoes_from_web(**request.json)
+    locacoes = select_locacao(locacao_id)
+    locacoes_from_db = [locacao_from_db(id) for id in locacoes]
+    return jsonify(locacoes_from_db)
+
+@app.route("/locacoes/<int:id>", methods=["PATCH", "PUT"])
+def alterar_locacoes(id):
+    locacao = locacao_from_web(**request.json)
+    if valida_locacao(**locacao):
+        update_locacao(id, *locacao)
+        locacao_cadastrada = get_locacao(id)
+        return jsonify(locacao_from_db(locacao_cadastrada))
+    else:
+        return jsonify({"erro":"Locação Inválida."})
+
+@app.route("/locacoes/<int:id>", methods=["DELETE"])
+def apagar_locacoes(id):
+    try:
+        delete_locacoes(id)
+        return "", 204
+    except:
+        return jsonify({"erro":"Impossível deletar esta locação."})
+
+
+@app.route("/pagamentos", methods=["POST"])
+def inserir_pagamento():
+    pagamento = pagamento_from_web(**request.json)
+    if valida_pagamento(**pagamento):
+        id_pagamento = insert_pagamento(**pagamento)
+        pagamento_cadastrado = get_pagamento(id_pagamento)
+        return pagamento_from_db(pagamento_cadastrado)
+    else:
+        return jsonify({"erro":"Pagamento Inválido."})
+
+@app.route("/pagamentos", methods=["GET"])
+def buscar_pagamentos():
+    pagamento_id = id_pagamentos_from_web(**request.json)
+    pagamentos = select_pagamento(pagamento_id)
+    pagamentos_from_db = [pagamento_from_db(id) for id in pagamentos]
+    return jsonify(pagamentos_from_db)
+
+@app.route("/pagamentos/<int:id>", methods=["PATH", "PUT"])
+def altera_pagamento(id):
+    pagamento = pagamento_from_web(**request.json)
+    if valida_pagamento(**pagamento):
+        update_pagamento(id, *pagamento)
+        pagamento_cadastrado = get_pagamento(id)
+        return jsonify(pagamento_from_db(pagamento_cadastrado))
+    else:
+        return jsonify({"erro":"Pagamento Inválido."})
+
+@app.route("/pagamentos/<int:id>", methods=["DELETE"])
+def apagar_pagamentos(id):
+    try:
+        delete_pagamentos(id)
+        return "", 204
+    except:
+        return jsonify({"erro":"Impossivel deletar esse pagamento."})
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', debug=True)
-
-
-
-
-
-
-
-
-
-
-"""
-@app.route("/usuarios", methods=["POST"])
-def inserir_usuario():
-    usuario = usuario_from_web(**request.json)
-    if valida_usuario(**usuario):
-        pass
-
-@app.route("/filmes", methods=["POST"])
-def inserir_filme():
-    filme = filme_from_web(**request.json)
-    if valida_filme(**filme):
-        id_filme = insert_filme(**filme)
-        filme_criado = get_filme(id_filme)
-        return jsonify(filme_from_db(filme))
-    else:
-        return jsonify({"erro": "Filme Inválido."})
-
-@app.route("/filmes/<int:id>", methods=["DELETE"])
-def apagar_filme(id):
-    filme_id = delete_id_from_web(**request.json)
-    try:
-        if valida_id(id):
-            delete_filme(**filme_id)
-            return jsonify(delete_id_from_db(filme_id))
-    except:
-        return jsonify({"erro": "Não foi possível deletar esse filme."})
-
-@app.route("/filmes/", methods=["GET"])
-def get_filme():
-    filme = filme_from_web(**request.json)
-    filme_selecionado = select_filme(**filme)
-    if filme_selecionado != None:
-        return jsonify(filme_from_db(filme_selecionado))
-    else: return jsonify({"erro":"Filme inválido."})
-"""
-#@app.route("/diretores", methods=["POST"]) # 1 - Checa a rota
-#def inserir_estado():
-#    estado = estado_from_web(**request.json) # 3 - formata o que vem da internet
-#    if valida_estado(**estado): # 2 - checa se os valores que vieram da internet são validos
-#        insert_estado(**estado) # 4- manda inserir o estado no banco de dados
-#        estado_criado = get_estado(estado["sigla"]) # 5- puxa estado criado do banco de dados
-#        return jsonify(estado_from_db(estado_criado)) # 6 - retorna estado formatado pro usuário
-#    else:
-#        return jsonify({"erro": "estado inválido"})

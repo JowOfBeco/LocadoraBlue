@@ -46,3 +46,19 @@ def valida_locacao(data_inicio, data_fim, filmes_id, id_usuario):
         return False
 
     return True
+
+def valida_pagamento(tipo, status, codigo_pagamento, valor, data, locacoes_id):
+    if len(tipo) == 0:
+        return False
+    if len(status) == 0:
+        return False
+    if codigo_pagamento == 0:
+        return False
+    if valor == 0:
+        return False
+    if data == 0:
+        return False
+    if locacoes_id == 0:
+        return False
+
+    return True
