@@ -87,7 +87,7 @@ def inserir_genero():
 
 @app.route("/generos", methods=["GET"])
 def buscar_generos():
-    nome_genero = genero_from_web(**request.args)
+    nome_genero = nome_genero_from_web(**request.json)
     generos = select_genero(nome_genero)
     generos_from_db = [genero_from_db(genero) for genero in generos]
     return jsonify(generos_from_db)

@@ -14,7 +14,6 @@ def usuario_from_db(args):
 def nome_usuario_from_web(**kwargs):
     return kwargs["nome_completo"] if "nome_completo" in kwargs else ""
 
-
 def diretor_from_web(**kwargs):
     return {
         "nome_completo": kwargs["nome_completo"] if "nome_completo" in kwargs else ""
@@ -25,10 +24,16 @@ def diretor_from_db(args):
         "id": args["id"],
         "nome_completo": args["nome_completo"],
             }
+
 def nome_diretor_from_web(**kwargs):
     return kwargs["nome_completo"] if "nome_completo" in kwargs else ""
 
 def genero_from_web(**kwargs):
+    return{
+       "nome": kwargs["nome"] if "nome" in kwargs else ""
+    }
+
+def nome_genero_from_web(**kwargs):
     return kwargs["nome"] if "nome" in kwargs else ""
 
 def genero_from_db(args):
