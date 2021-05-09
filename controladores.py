@@ -166,7 +166,7 @@ def buscar_locacoes():
 def alterar_locacoes(id):
     locacao = locacao_from_web(**request.json)
     if valida_locacao(**locacao):
-        update_locacao(id, *locacao)
+        update_locacao(id, **locacao)
         locacao_cadastrada = get_locacao(id)
         return jsonify(locacao_from_db(locacao_cadastrada))
     else:
