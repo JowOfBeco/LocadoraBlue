@@ -62,6 +62,8 @@ def filme_from_db(args):
         "diretores_id": args["diretores_id"],
         "generos_id": args["generos_id"],
     }
+def titulo_filme_from_web(**kwargs):
+    return kwargs["titulo"] if "titulo" in kwargs else ""
 
 def locacao_from_web(**kwargs):
     return {
