@@ -24,8 +24,8 @@ def get_diretor(id_diretor):
 def select_diretor(nome_completo):
     return search_data("diretores", "nome_completo", nome_completo)
 
-def update_diretor(id_diretor, nome_completo, CPF):
-    update("diretores", "id", id_diretor, ["nome_completo", "CPF"], [nome_completo, CPF])
+def update_diretor(id_diretor, nome_completo):
+    update("diretores", "id", id_diretor, ["nome_completo",], [nome_completo,])
 
 def delete_diretor(id):
     delete_data("diretores", "id", id)
@@ -66,3 +66,30 @@ def insert_locacao(data_inicio, data_fim, filmes_id, id_usuario):
                   [data_inicio, data_fim, filmes_id, id_usuario])
 def get_locacao(id):
     return select("locacoes", "id", id)[0]
+
+def select_locacao(id):
+    return search_data("locacoes", "id", id)
+
+def update_locacao(id, data_inicio, data_fim, filmes_id, id_usuario):
+    update("locacoes", "id", id, ["id", "data_inicio", "data_fim", "filmes_id", "id_usuario"],
+           [id, data_inicio, data_fim, filmes_id, id_usuario])
+
+def delete_locacoes(id):
+    delete_data("locacoes", "id", id)
+
+def insert_pagamento(tipo, status, codigo_pagamento, valor, data, locacoes_id):
+    return insert("pagamentos", ["tipo", "status", "codigo_pagamento", "valor", "data", "locacoes_id"],
+                  [tipo, status, codigo_pagamento, valor, data, locacoes_id])
+
+def get_pagamento(id):
+    return select("pagamentos", "id", id)[0]
+
+def select_pagamento(id):
+    return search_data("pagamentos", "id", id)
+
+def update_pagamento(id, tipo, status, codigo_pagamento, valor, data, locacoes_id):
+    update("pagamentos", "id", id, ["tipo", "status", "codigo_pagamento", "valor", "data", "locacoes_id"],
+           [tipo, status, codigo_pagamento, valor, data, locacoes_id])
+
+def delete_pagamentos(id):
+    delete_data("pagamentos", "id", id)
