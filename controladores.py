@@ -198,11 +198,11 @@ def buscar_pagamentos():
     pagamentos_from_db = [pagamento_from_db(id) for id in pagamentos]
     return jsonify(pagamentos_from_db)
 
-@app.route("/pagamentos/<int:id>", methods=["PATH", "PUT"])
+@app.route("/pagamentos/<int:id>", methods=["PATCH", "PUT"])
 def altera_pagamento(id):
     pagamento = pagamento_from_web(**request.json)
     if valida_pagamento(**pagamento):
-        update_pagamento(id, *pagamento)
+        update_pagamento(id, **pagamento)
         pagamento_cadastrado = get_pagamento(id)
         return jsonify(pagamento_from_db(pagamento_cadastrado))
     else:
