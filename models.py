@@ -48,6 +48,7 @@ def delete_genero(id):
 def insert_filme(titulo, ano, classificacao, preco, diretores_id, generos_id):
     return insert("filmes", ["titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"],
                   [titulo, ano, classificacao, preco, diretores_id, generos_id])
+
 def get_filme(id_filme):
     return select("filmes", "id", id_filme)[0]
 
@@ -56,7 +57,7 @@ def select_filme(titulo):
 
 def update_filme(id, titulo, ano, classificacao, preco, diretores_id, generos_id):
     update("filmes", "id", id, ["titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"],
-           [id, titulo, ano, classificacao, preco, diretores_id, generos_id])
+           [titulo, ano, classificacao, preco, diretores_id, generos_id])
 
 def delete_filme(id):
     delete_data("filmes", "id", id)

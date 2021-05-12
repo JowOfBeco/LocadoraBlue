@@ -63,11 +63,14 @@ def filme_from_db(args):
         "generos_id": args["generos_id"],
     }
 
+def titulo_filme_from_web(**kwargs):
+    return kwargs["titulo"] if "titulo" in kwargs else ""
+
 def locacao_from_web(**kwargs):
     return {
         "data_inicio": kwargs["data_inicio"] if "data_inicio" in kwargs else "",
         "data_fim": kwargs["data_fim"] if "data_fim" in kwargs else "",
-        "filmes_id": kwargs["filme_id"] if "filmes_id" in kwargs else "",
+        "filmes_id": kwargs["filmes_id"] if "filmes_id" in kwargs else "",
         "id_usuario": kwargs["id_usuario"] if "id_usuario" in kwargs else "",
     }
 

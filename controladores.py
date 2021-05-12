@@ -122,7 +122,7 @@ def inserir_filme():
 
 @app.route("/filmes", methods=["GET"])
 def buscar_filmes():
-    titulo_filme = filme_from_web(**request.args)
+    titulo_filme = titulo_filme_from_web(**request.json)
     filmes = select_filme(titulo_filme)
     filmes_from_db = [filme_from_db(filme) for filme in filmes]
     return jsonify(filmes_from_db)
@@ -131,7 +131,7 @@ def buscar_filmes():
 def alterar_filme(id):
     filme = filme_from_web(**request.json)
     if valida_filme(**filme):
-        update_filme(id, *filme)
+        update_filme(id, **filme)
         filme_cadastrado = get_filme(id)
         return jsonify(filme_from_db(filme_cadastrado))
     else:
@@ -166,7 +166,7 @@ def buscar_locacoes():
 def alterar_locacoes(id):
     locacao = locacao_from_web(**request.json)
     if valida_locacao(**locacao):
-        update_locacao(id, *locacao)
+        update_locacao(id, **locacao)
         locacao_cadastrada = get_locacao(id)
         return jsonify(locacao_from_db(locacao_cadastrada))
     else:
